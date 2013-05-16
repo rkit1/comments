@@ -1,0 +1,71 @@
+<div ng-controller="CommentsController">
+    <div>
+        <dl>
+            <div ng-repeat="comment in comments" style="margin-bottom: 1ex;">
+                <div class="row-fluid">
+                    <div class="span2" style="text-align: left;">
+                        <strong>{{comment.author}}:</strong>
+                        <br>
+                        <!--<small>{{formatDate(comment.time)}}</small>
+                        Даты неверны, проблема со стороын php/mysql-->
+                    </div>
+                    <div class="span10" style="white-space: pre-line;"
+                            >{{comment.comment}}</div>
+                </div>
+                <hr>
+            </div>
+        </dl>
+        <div ng-show="noComments">
+            <p class="text-info">
+                Пока комментариев нет.
+            </p>
+            <hr>
+        </div>
+        <div ng-show="displayError">
+            <p class="text-error">
+                Произошла ошибка при поытке получения комментариев. Попробуйте обновить страницу.
+            </p>
+            <hr>
+        </div>
+    </div>
+
+    <div>
+        <p ng-show="isIE10" class="text-warning">
+            Вы используете браузер Internet Еxplorer 10.
+            Некоторые версии этого браузера содержат ошибку, препятствующую отправке комментариев.
+            Если комментарий не отправляется, то попробуйте другой браузер, например,
+            <a href="http://www.mozilla.org/">Firefox</a> или
+            <a href="https://www.google.com/intl/ru/chrome/browser/">Chrome</a>.
+        </p>
+        <form class="form-horizontal" name="submitForm">
+            <div class="control-group">
+                <label for="author" class="control-label">Имя</label>
+                <div class="controls">
+                    <input type="text" id="author" name="author" ng-model="toSubmit.author"
+                           class="span8" maxlength="128"
+                           ng-disabled="formState != 'ready'">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="comment" class="control-label">Сообщение</label>
+                <div class="controls">
+                    <textarea id="comment" name="comment" ng-model="toSubmit.comment"
+                              rows="7" class="span8" required
+                              ng-disabled="formState != 'ready'"></textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button ng-click="submit()" ng-disabled="formState != 'ready' || submitForm.$invalid"
+                            class="btn btn-primary">Отправить</button>
+                </div>
+                <div class="controls" ng-show="formState == 'message'">Ошибка отправки комментария: {{message}}
+                    <button class="btn" ng-click="readMessage()">Попробовать еще раз.</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

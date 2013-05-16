@@ -1,0 +1,103 @@
+.playing, .paused, .progress {
+    color: red;
+}
+p, hr, pre, fieldset, tt, blockquote, table
+{
+	padding: 0;
+	margin: 1ex;
+}
+h1, h2, h3, h4, h5, h6
+{
+/	font-family: georgia;
+	margin: 0;
+}
+div.page 
+{
+	border: 1px solid black;
+	background-color: white;
+	padding: 3em;
+	margin: 0.5em;
+}
+img.clean
+{
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+body 
+{
+	text-align: left;
+	background-color: #C0C0C0;
+}
+ul
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+ol
+{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+table
+{
+	border-width: 1px;
+	border-spacing: 0px;
+	border-style: dotted;
+	border-color: black;
+	border-collapse: collapse;
+}
+th 
+{
+	border-width: 1px;
+	padding: 1px;
+	border-style: dotted;
+	border-color: black;
+	background-color: #FFFFF0;
+}
+td 
+{
+	border-width: 1px;
+	padding: 1px;
+	border-style: dotted;
+	border-color: black;
+}
+table.noborder, table.noborder tr td
+{
+	border-style: none;
+}
+blockquote {
+    border-left: 5px solid darkblue;
+    padding-left: 1ex;
+}
+.stih
+{
+	font-family: courier new, courier;
+	margin-left: 3em;
+	margin-bottom: 1em;
+}
+.signature
+{
+	color: gray;
+	text-align: right;
+}
+.thumb
+{
+	text-align: center;
+	font-size: small;
+}
+img
+{
+	border: 1px solid black;
+}
+img.left
+{
+    float: left;
+    margin: 1ex;
+}
+img.right
+{
+    float: right;
+    margin: 1ex;
+}
