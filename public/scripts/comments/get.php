@@ -1,9 +1,9 @@
 <?php
-require_once 'setup.php';
+require_once 'includes/setup.php';
 
 if (isset($_GET['k']))
 {
-    require_once 'db.php';
+    require_once 'includes/db.php';
 
     if (isset($_GET['last']) && is_numeric($_GET['last']))
         $t = $_GET['last'];

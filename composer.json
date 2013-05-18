@@ -1,0 +1,14 @@
+{
+    "name": "rkit/comments",
+    "description": "description_text",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "rkit",
+            "email": "me@rkit.pp.ru"
+        }
+    ],
+    "require": {
+        "php-activerecord/php-activerecord": "v1.1.*"
+    }
+}

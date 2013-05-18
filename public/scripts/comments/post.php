@@ -1,10 +1,10 @@
 <?php
-require_once 'setup.php';
+require_once 'includes/setup.php';
 
 if (isset($_GET['k']))
 {
     $key = $_GET['k'];
-    require_once 'db.php';
+    require_once 'includes/db.php';
     $body = file_get_contents('php://input');
     $post = json_decode($body);
 
