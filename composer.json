@@ -9,6 +9,6 @@
         }
     ],
     "require": {
-        "php-activerecord/php-activerecord": "v1.1.*"
+        "php-activerecord/php-activerecord": "1.1.*"
     }
 }

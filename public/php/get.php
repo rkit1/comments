@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/setup.php';
+require_once '../../includes/setup.php';
 
 if (isset($_GET['k']))
 {

@@ -27,7 +27,7 @@ function CommentsController($scope, $http, $cookies, $window) {
 
         $http({
             method:'get',
-            url:'/scripts/comments/get.php',
+            url:commentsRoot + '/php/get.php',
             params: params,
             cache: false
         }).success(function(data){
@@ -64,7 +64,7 @@ function CommentsController($scope, $http, $cookies, $window) {
         $scope.formState = "busy";
         $http({
             method: 'post',
-            url:'/scripts/comments/post.php',
+            url:commentsRoot + '/php/post.php',
             params: {k: $scope.key},
             data:$scope.toSubmit,
             cache:false
