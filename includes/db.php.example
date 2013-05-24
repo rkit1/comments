@@ -2,7 +2,7 @@
 require_once 'vendor/php-activerecord/php-activerecord/ActiveRecord.php';
 ActiveRecord\Config::initialize(function($cfg)
 {
-    $cfg->set_model_directory(dirname(__FILE__).'./sqlmodels');
+    $cfg->set_model_directory(dirname(__FILE__).'/sqlmodels');
     $cfg->set_connections(array(
                        // connection string here
       'development' => 'mysql://user:password@host/database;charset=utf8'
