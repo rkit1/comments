@@ -34,7 +34,7 @@ set_error_handler("myErrorHandler");
 function exception_handler($exception) {
     if (get_class($exception) == 'ActiveRecord\DatabaseException')
     {
-        outError('Ошибка при обращении к базе данных');
+        outError('Ошибка при обращении к базе данных:' . $exception->getMessage());
     }
     else outError($exception->getMessage());
 }
