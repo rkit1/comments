@@ -8,13 +8,13 @@ if (isset($_GET['k']))
     if (isset($_GET['last']) && is_numeric($_GET['last']))
         $t = $_GET['last'];
     else $t = 0;
-    $time = new ActiveRecord\DateTime();
-    $time->setTimestamp($t);
+    //$time = new ActiveRecord\DateTime();
+    //$time->setTimestamp($t);
     $key = $_GET['k'];
 
     $options = array(
         'readonly' => true,
-        'conditions' => array('post = ? AND time > ?', $key, $time),
+        'conditions' => array('post = ?', $key),
         'select' => 'idComments, comment, author, time'
     );
 
