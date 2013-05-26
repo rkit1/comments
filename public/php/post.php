@@ -8,13 +8,13 @@ if (isset($_GET['k']))
     $body = file_get_contents('php://input');
     $post = json_decode($body);
 
-    /*
+
     if ($post == null) outError("No data given");
     $post->author = trim($post->author);
-    if (strlen($post->author)==0) $post->author = null;
+    if (strlen($post->author)==0) outError("Не указано имя");
     $post->comment = trim($post->comment);
-    if (strlen($post->author)<5) outError("Комментарий должен содержать, как минимум, 5 букв.");
-*/
+    if (strlen($post->comment)<5) outError("Комментарий должен содержать, как минимум, 5 букв.");
+
     $arr = array(
         'author' => $post->author,
         'comment' => $post->comment,
