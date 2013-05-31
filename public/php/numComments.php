@@ -1,21 +1,26 @@
 <?php
 require_once '../../includes/setup.php';
 
-if (isset($_GET['k']))
+if (isset($_GET['hrefs']))
 {
     require_once 'includes/db.php';
-    $key = $_GET['k'];
+    $hrefs = $_GET['hrefs'];
 
     $options = array(
         'readonly' => true,
-        'conditions' => array('post = ?', $key),
+        'conditions' => array('post in ?', $hrefs),
+        'select' => 'count(post) as count, post'
     );
 
-    $count = Comments::count($options);
+    $rows = Comments::find('all', $options);
 
-    $out = array(
-        'count' => $count
-    );
+    $out = array();
+    foreach($rows as $row)
+        $out[] = array(
+            'k' => $row->post,
+            'count' => $row->count
+        );
+
 
 }
 echo json_encode($out);
