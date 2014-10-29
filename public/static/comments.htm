@@ -9,8 +9,11 @@
                         <!--<small>{{formatDate(comment.time)}}</small>
                         Даты неверны, проблема со стороын php/mysql-->
                     </div>
-                    <div class="span10" style="white-space: pre-line;"
+                    <div class="span9" style="white-space: pre-line;"
                             >{{comment.comment}}</div>
+                    <div class="span1" ng-show="isAdmin">
+                        <i class="icon-remove" ng-click="remove(comment)" style="cursor: pointer"></i>
+                    </div>
                 </div>
                 <hr>
             </div>

@@ -28,7 +28,33 @@ CREATE  TABLE IF NOT EXISTS `Comments`.`Comments` (
   PRIMARY KEY (`idComments`) )
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `Comments`.`admins`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `Comments`.`admins` (
+  `adminToken` VARCHAR(32) NOT NULL ,
+  PRIMARY KEY (`adminToken`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 USE `Comments` ;
+
+-- -----------------------------------------------------
+-- procedure CleanSessions
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `Comments`$$
+CREATE PROCEDURE `Comments`.`CleanSessions` ()
+BEGIN
+DELETE FROM `Comments`
+  WHERE ADDDATE(`lastActivity`, INTERVAL 31 DAY) < CURRENT_TIMESTAMP();
+END$$
+
+DELIMITER ;
+
+CREATE USER 'comments' IDENTIFIED BY 'CHANGEME';
 
 GRANT ALL ON `Comments`.* TO 'comments';
 GRANT SELECT ON TABLE `Comments`.* TO 'comments';

@@ -1,4 +1,3 @@
-var x;
 angular.module('Comments', ['ngCookies']);
 function CommentsController($scope, $http, $cookies, $window) {
     ////
@@ -37,11 +36,13 @@ function CommentsController($scope, $http, $cookies, $window) {
         }).error(function(data){
             $scope.displayError = true;
         })
-    }
+    };
     $scope.formatDate = function(ts){
         d = new Date(ts * 1000);
         return d.toLocaleString();
-    }
+    };
+
+    $scope.isAdmin = $cookies.hasOwnProperty('adminToken');
 
     ////
     // form
@@ -54,11 +55,11 @@ function CommentsController($scope, $http, $cookies, $window) {
     $scope.toSubmit.author = $cookies.author;
     $scope.$watch('toSubmit.author', function(newV, oldV){
         $cookies.author = newV;
-    })
+    });
 
     $scope.readMessage = function(){
         $scope.formState = "ready";
-    }
+    };
 
     $scope.submit = function() {
         $scope.formState = "busy";
@@ -79,7 +80,25 @@ function CommentsController($scope, $http, $cookies, $window) {
             }
         })
 
-    }
+    };
+
+    $scope.remove = function (comment) {
+        if (confirm("Точно удалить комментарий \n" + comment.comment)){
+            $http({
+                method: 'get',
+                url:commentsRoot + './php/remove.php',
+                params: {k: $scope.key, id: comment.idComments},
+                data:$scope.toSubmit,
+                cache:false
+            }).success(function() {
+                $scope.fetchComments();
+            }).error(function(data){
+                if (data.result == "error") {
+                   alert(data.message);
+                }
+            })
+        }
+    };
 
     ////
     // init app
