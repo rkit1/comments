@@ -5,7 +5,7 @@ function CommentsController($scope, $http, $cookies, $window) {
     ////
     //delete $http.defaults.headers.common['X-Requested-With'];
     $scope.key = $window.location.pathname;
-
+    $scope.isAdmin = $cookies.hasOwnProperty('adminToken');
     $scope.isIE10 = !!navigator.userAgent.match(/MSIE 10/);
 
     ////
@@ -15,23 +15,13 @@ function CommentsController($scope, $http, $cookies, $window) {
     $scope.displayError = false;
     $scope.noComments = false;
     $scope.fetchComments = function() {
-
-        var params = {k: $scope.key};
-
-        ////
-        // Говнит, портит даты со стороны php/mysql.
-        ////
-        // if ($scope.comments.length > 0)
-        //    params.last = $scope.comments[$scope.comments.length-1].time;
-
         $http({
             method:'get',
             url:commentsRoot + './php/get.php',
-            params: params,
+            params: {k: $scope.key},
             cache: false
         }).success(function(data){
-            $scope.comments = data; //$scope.comments.concat(data);
-                                    //См. выше
+            $scope.comments = data;
             $scope.noComments = $scope.comments.length == 0;
         }).error(function(data){
             $scope.displayError = true;
@@ -41,8 +31,6 @@ function CommentsController($scope, $http, $cookies, $window) {
         d = new Date(ts * 1000);
         return d.toLocaleString();
     };
-
-    $scope.isAdmin = $cookies.hasOwnProperty('adminToken');
 
     ////
     // form
