@@ -3,7 +3,7 @@ set_include_path(dirname(__FILE__).'/../');
 $out = array();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS, POST");
-header("Access-Control-Max-Age: 1"); //1000
+header("Access-Control-Max-Age: 1000");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-type: application/json");
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') die();

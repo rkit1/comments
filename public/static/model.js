@@ -70,6 +70,10 @@ function CommentsController($scope, $http, $cookies, $window) {
 
     };
 
+    ////
+    // remove
+    ////
+
     $scope.remove = function (comment) {
         if (confirm("Точно удалить комментарий \n" + comment.comment)){
             $http({
