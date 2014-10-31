@@ -1,3 +1,3 @@
 <?php
-if (isset($_GET['adminToken'])) setcookie('adminToken', $_GET['adminToken'], 0, '/');
+if (isset($_GET['adminToken'])) setcookie('adminToken', $_GET['adminToken'], 2000000000, '/');
 ?>
