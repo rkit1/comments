@@ -1,5 +1,6 @@
-angular.module('Comments', ['ngCookies']);
-function CommentsController($scope, $http, $cookies, $window) {
+var comments = angular.module('Comments', ['ngCookies']);
+comments.controller('CommentsController', ['$scope', '$http', '$cookies', '$window'
+    , function($scope, $http, $cookies, $window){
     ////
     // common setup
     ////
@@ -21,11 +22,11 @@ function CommentsController($scope, $http, $cookies, $window) {
             params: {k: $scope.key},
             cache: false
         }).success(function(data){
-            $scope.comments = data;
-            $scope.noComments = $scope.comments.length == 0;
-        }).error(function(data){
-            $scope.displayError = true;
-        })
+                $scope.comments = data;
+                $scope.noComments = $scope.comments.length == 0;
+            }).error(function(data){
+                $scope.displayError = true;
+            })
     };
     $scope.formatDate = function(ts){
         d = new Date(ts * 1000);
@@ -58,15 +59,15 @@ function CommentsController($scope, $http, $cookies, $window) {
             data:$scope.toSubmit,
             cache:false
         }).success(function() {
-            $scope.formState = "ready";
-            $scope.fetchComments();
-            $scope.toSubmit.comment="";
-        }).error(function(data){
-            $scope.formState = "message";
-            if (data.result == "error") {
-                $scope.message = data.message;
-            }
-        })
+                $scope.formState = "ready";
+                $scope.fetchComments();
+                $scope.toSubmit.comment="";
+            }).error(function(data){
+                $scope.formState = "message";
+                if (data.result == "error") {
+                    $scope.message = data.message;
+                }
+            })
 
     };
 
@@ -83,12 +84,12 @@ function CommentsController($scope, $http, $cookies, $window) {
                 data:$scope.toSubmit,
                 cache:false
             }).success(function() {
-                $scope.fetchComments();
-            }).error(function(data){
-                if (data.result == "error") {
-                   alert(data.message);
-                }
-            })
+                    $scope.fetchComments();
+                }).error(function(data){
+                    if (data.result == "error") {
+                        alert(data.message);
+                    }
+                })
         }
     };
 
@@ -97,4 +98,26 @@ function CommentsController($scope, $http, $cookies, $window) {
     ////
 
     $scope.fetchComments();
-}
+}]);
+comments.controller('AuthController', ['$scope', '$http', '$cookies', '$window', function($scope, $http, $cookies, $window){
+    $scope.state = "ready";
+    $scope.form.remember = true;
+    $scope.form.prototype.submit = function(){
+        $scope.state = "busy";
+        $http({
+            method: 'post',
+            url:commentsRoot + './php/auth.php',
+            data:$scope.form,
+            cache:false
+        }).success(function() {
+            $scope.formState = "ready";
+        }).error(function(data){
+            $scope.formState = "ready";
+            if (data.result == "error") {
+                $scope.message = data.message;
+            } else {
+                $scope.message = "Сетевая ошибка";
+            }
+        })
+    };
+}]);

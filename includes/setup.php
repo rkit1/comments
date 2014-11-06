@@ -8,12 +8,12 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-type: application/json");
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') die();
 
-function outError($msg)
+function outError($msg, $code=500)
 {
     $out = new stdClass();
     $out->result = "error";
     $out->message = $msg;
-    header(':', true, 500); // needs to be fixed to http_response_code in php 5.4
+    header(':', true, $code); // needs to be fixed to http_response_code in php 5.4
     echo json_encode($out);
     die();
 }
