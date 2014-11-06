@@ -16,6 +16,7 @@ class Session {
      * @var Int
      */
     private $ttl;
+    private $IsAdmin = null;
 
     function __construct() {}
 
@@ -43,19 +44,29 @@ class Session {
 
         $db->exec('CALL Cleanup_Sessions');
 
-        $t->touchCookie();
+        $t->TouchCookie();
         return $t;
     }
 
-    function touchCookie(){
-        setcookie('commentsUser', $this->sid, time() + $this->ttl, '/');
+    /**
+     * @return Bool
+     */
+    public function IsAdmin(){
+        if (is_null($this->IsAdmin)){
+            $st = $this->db->prepare('SELECT AdminStatus FROM users WHERE idUsers = ?');
+            $st->execute($this->user);
+            $res = $st->fetch();
+            $this->IsAdmin = $res[0] == 1;
+        }
+        return $this->IsAdmin;
     }
 
     /**
      * @param $db PDO
+     * @param $touch Bool
      * @return Session
      */
-    public static function CheckSession($db){
+    public static function CheckSession($db, $touch = true){
         if(!isset($_COOKIE['commentsUser'])) return null;
         $st = $db->prepare('SELECT User, TimeToLive FROM Sessions
             WHERE ADDTIME(LastActivity, SEC_TO_TIME(TimeToLive)) >= NOW()
@@ -68,7 +79,12 @@ class Session {
         $t->user = $res[0];
         $t->ttl = $res[1];
         $t->db = $db;
+        if ($touch) $t->Touch();
         return $t;
+    }
+
+    function TouchCookie(){
+        setcookie('commentsUser', $this->sid, time() + $this->ttl, '/');
     }
 
     public function Touch(){

@@ -1,26 +1,17 @@
 <?php
 require_once '../../includes/setup.php';
-
-if (isset($_GET['k']))
+require_once 'includes/db.php';
+if (isset($_GET['k']) && $s = Session::CheckSession($db))
 {
     $key = $_GET['k'];
-    require_once 'includes/db.php';
+
     $body = file_get_contents('php://input');
     $post = json_decode($body);
 
-
-    if ($post == null) outError("No data given");
-    $post->author = trim($post->author);
-    if (strlen($post->author)==0) outError("Не указано имя");
+    if ($post == null) outError("No data given", 400);
     $post->comment = trim($post->comment);
-    if (strlen($post->comment)<5) outError("Комментарий должен содержать, как минимум, 5 букв.");
+    if (strlen($post->comment)<5) outError("Комментарий должен содержать, как минимум, 5 букв.", 400);
 
-    $arr = array(
-        'author' => $post->author,
-        'comment' => $post->comment,
-        'post' => $key
-    );
-    if (Comments::create($arr)->save())
-        $out['result'] = 'ok';
+    $st = $db->prepare('INSERT INTO Comments (post, comment, user) VALUES (?, ?, ?)');
+    $st->execute(array($key, $post->author, $s->user));
 }
-echo json_encode($out);

@@ -1,6 +1,5 @@
 <?php
 set_include_path(dirname(__FILE__).'/../');
-$out = array();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS, POST");
 header("Access-Control-Max-Age: 1000");

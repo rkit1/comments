@@ -4,33 +4,20 @@ require_once '../../includes/setup.php';
 if (isset($_GET['k']))
 {
     require_once 'includes/db.php';
+    $out = array();
+    $st = $db->prepare('SELECT (idComments, comment, Name, time) FROM Comments JOIN users WHERE post = ?');
+    $st->execute($_GET['k']);
 
-    if (isset($_GET['last']) && is_numeric($_GET['last']))
-        $t = $_GET['last'];
-    else $t = 0;
-    //$time = new ActiveRecord\DateTime();
-    //$time->setTimestamp($t);
-    $key = $_GET['k'];
-
-    $options = array(
-        'readonly' => true,
-        'conditions' => array('post = ?', $key),
-        'select' => 'idComments, comment, author, time'
-    );
-
-    $comments = Comments::find('all', $options);
-
-    foreach($comments as $comment)
+    while($row = $st->fetch())
     {
         $out[] = array(
-            'idComments' => $comment->idcomments,
-            'comment' => $comment->comment,
-            'author' => $comment->author,
-            'time' => $comment->time->format('U')
+            'idComments' => $row[0],
+            'comment' => $row[1],
+            'author' => $row[2],
+            'time' => $row[3]
         );
     };
-}
 
-echo json_encode($out);
-//echo Comments::table()->last_sql;
+    echo json_encode($out);
+}
 ?>

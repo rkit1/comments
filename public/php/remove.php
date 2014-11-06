@@ -1,23 +1,21 @@
 <?php
 require_once '../../includes/setup.php';
-if (isset($_GET['k'], $_GET['id']) && is_numeric($_GET['id']))
+if (isset($_GET['k']))
 {
+    $body = file_get_contents('php://input');
+    $data = json_decode($body);
     require_once 'includes/db.php';
-    if (Admins::exists($_COOKIE['adminToken']))
-    {
-        Comments::delete_all(array('conditions' => array('idComments = ?', $_GET['id']) ));
-        $out['result'] = 'success';
+    $s = Session::CheckSession($db);
+
+    $data->id = trim($data->id);
+    if (!is_numeric($data->id)) outError('wrong input', 400);
+
+    if ($s->IsAdmin()) {
+        $db->prepare('DELETE FROM comments WHERE idComments = ?')->execute($data['id']);
+        echo json_encode(array('result'=>'success'));
     } else {
-        $out['result'] = 'error';
-        $out['message'] = 'access denied';
-        header(':', true, 403);
+        outError('access denied', 403);
     }
-} else {
-    $out ['result'] = 'error';
-    $out ['message'] = 'wrong input';
-    header(':', true, 400);
 }
 
-echo json_encode($out);
-//echo Comments::table()->last_sql;
 ?>
