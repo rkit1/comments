@@ -1,6 +1,6 @@
 var comments = angular.module('Comments', ['ngCookies']);
 var x;
-comments.controller('CommentsController', ['$scope', '$window', '$http', function($scope, $window, $http){
+comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http', function($scope, $window, Auth, $http){
     $scope.key = $window.location.pathname;
     $scope.isIE10 = !!navigator.userAgent.match(/MSIE 10/);
 
@@ -66,43 +66,68 @@ comments.controller('CommentsController', ['$scope', '$window', '$http', functio
         }
     };
 
-    var st = 'unauthorized';
-    if ($cookies['commentsUser']) st = 'authorized';
     $scope.authCtl = {
         data: {remember:true},
-        state: st,
-        message: null,
         submit: function(){
-            this.state = "working";
-            $http({
-                method: 'post',
-                url:commentsRoot + './php/auth.php',
-                data:this.data,
-                cache:false
-            }).success(function() {
-                this.state = "authorized";
-                $scope.$emit('authSuccess');
-            }).error(function(data){
-                this.state = "error";
-                if (data.result == "error") {
-                    this.message = data.message;
-                } else {
-                    this.message = "Сетевая ошибка";
-                }
-            });
-        },
-        logout: function(){
-            $cookies['commentsUser'] = null;
-            this.state = 'unauthorized';
-            $http({
-                method: 'get',
-                url: commentsRoot + './php/logout.php',
-                cache: false
-            });
+            Auth.authorize(this.data)
         }
     };
 
     // "Post", "Auth", "Register", "Settings"
-    if ($scope.authCtl.state == "authorized") $scope.tab = "Post";
-    else $scope.tab = "Auth";
+    $scope.tab = "Loading";
+    Auth.checkSession().then(function(name){
+        $scope.name = name;
+        $scope.tab = 'Post';
+    }, function(fail){
+        $scope.tab = 'Auth'
+    });
+}]);
+comments.factory('Auth', ['$http', '$q', function($http, $q){
+
+    return {
+        login: function(authData){
+            var pr = $q.defer();
+            $http({
+                method: 'post',
+                url:commentsRoot + './php/auth.php',
+                data:authData,
+                cache:false
+            }).success(function(data) {
+                pr.resolve(data.name);
+            }).error(function(data){
+                if (data.result == "error") {
+                    pr.reject(data.message);
+                } else {
+                    pr.reject("Сетевая ошибка");
+                }
+            });
+            return pr.promise;
+        },
+        checkSession: function(){
+            var pr = $q.defer();
+            $http({
+                method: 'get',
+                url:commentsRoot + './php/checkAuth.php',
+                cache:false
+            }).success(function(data) {
+                pr.resolve(data.name);
+            }).error(function(data){
+                pr.reject();
+            });
+            return pr.promise;
+        },
+        logout: function(){
+            var pr = $q.defer();
+            $http({
+                method: 'get',
+                url: commentsRoot + './php/logout.php',
+                cache: false
+            }).success(function(){
+                pr.resolve();
+            }).error(function(){
+                pr.reject();
+            });
+            return pr.promise;
+        }
+    };
 }]);

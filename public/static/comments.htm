@@ -40,7 +40,6 @@
             <a href="https://www.google.com/intl/ru/chrome/browser/">Chrome</a>.
         </p>
         <form class="form-horizontal" name="postForm">
-
             <div class="control-group">
                 <label for="comment" class="control-label">Сообщение</label>
                 <div class="controls">
@@ -59,11 +58,12 @@
                     <button class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
                 </div>
             </div>
-
+            <p>{{name}}</p>
+            <p>Настройки</p>
         </form>
     </div>
     <div ng-show="tab == 'Auth'">
-        <div ng-controller="AuthController">
+        <div>
             <form role="form" class="form-horizontal" ng-submit="submit()">
                 <div class="form-group">
                     <label for="email" class="control-label">Электронная почта</label>

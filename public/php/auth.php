@@ -14,5 +14,5 @@ if (!$user = $st->fetch()) outError ("Неправильно введено им
 Session::NewSession($user[0], $auth->remember, $db);
 $db->commit();
 
-echo json_encode(array('result'=>'success'));
+echo json_encode(array('result'=>'success', 'name' => $user[1]));
 ?>
