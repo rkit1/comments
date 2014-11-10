@@ -18,7 +18,7 @@
                 <hr>
             </div>
         </dl>
-        <div ng-show="noComments">
+        <div ng-show="comments == []">
             <p class="text-info">
                 Пока комментариев нет.
             </p>
@@ -31,8 +31,7 @@
             <hr>
         </div>
     </div>
-
-    <div>
+    <div ng-show="tab == 'Post'">
         <p ng-show="isIE10" class="text-warning">
             Вы используете браузер Internet Еxplorer 10.
             Некоторые версии этого браузера содержат ошибку, препятствующую отправке комментариев.
@@ -40,35 +39,61 @@
             <a href="http://www.mozilla.org/">Firefox</a> или
             <a href="https://www.google.com/intl/ru/chrome/browser/">Chrome</a>.
         </p>
-        <form class="form-horizontal" name="submitForm">
-            <div class="control-group">
-                <label for="author" class="control-label">Имя</label>
-                <div class="controls">
-                    <input type="text" id="author" name="author" ng-model="toSubmit.author"
-                           class="span8" maxlength="128" required
-                           ng-disabled="formState != 'ready'">
-                </div>
-            </div>
+        <form class="form-horizontal" name="postForm">
 
             <div class="control-group">
                 <label for="comment" class="control-label">Сообщение</label>
                 <div class="controls">
-                    <textarea id="comment" name="comment" ng-model="toSubmit.comment"
+                    <textarea id="comment" name="comment" ng-model="postFormCtl.data.comment"
                               rows="7" class="span8" required
-                              ng-disabled="formState != 'ready'"></textarea>
+                              ng-disabled="postFormCtl.state != 'ready'"></textarea>
                 </div>
             </div>
-
             <div class="control-group">
                 <div class="controls">
-                    <button ng-click="submit()" ng-disabled="formState != 'ready' || submitForm.$invalid"
+                    <button ng-click="postFormCtl.submit()"
+                            ng-disabled="postFormCtl.state != 'ready' || postForm.$invalid"
                             class="btn btn-primary">Отправить</button>
                 </div>
-                <div class="controls" ng-show="formState == 'message'">Ошибка отправки комментария: {{message}}
-                    <button class="btn" ng-click="readMessage()">Попробовать еще раз.</button>
+                <div class="controls" ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{message}}
+                    <button class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
                 </div>
             </div>
 
         </form>
     </div>
+    <div ng-show="tab == 'Auth'">
+        <div ng-controller="AuthController">
+            <form role="form" class="form-horizontal" ng-submit="submit()">
+                <div class="form-group">
+                    <label for="email" class="control-label">Электронная почта</label>
+                    <div class="controls">
+                        <input type="email" class="form-control" id="email" placeholder="user@example.com" ng-model="form.email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="control-label">Пароль</label>
+                    <div class="controls">
+                        <input type="password" class="form-control" id="password" ng-model="form.password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="form.remember">Запомнить
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">Вход</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div ng-show="tab == 'Register'"></div>
+    <div ng-show="tab == 'Settings'"></div>
 </div>

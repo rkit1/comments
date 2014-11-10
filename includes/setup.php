@@ -25,16 +25,14 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
         break;
         default:
             outError("[$errfile:$errline] $errstr");
-            die();
     }
 }
 set_error_handler("myErrorHandler");
 
+/**
+ * @param $exception Exception
+ */
 function exception_handler($exception) {
-    if (get_class($exception) == 'ActiveRecord\DatabaseException')
-    {
-        outError('Ошибка при обращении к базе данных:' . $exception->getMessage());
-    }
-    else outError($exception->getMessage());
+    outError($exception->getMessage());
 }
 set_exception_handler('exception_handler');

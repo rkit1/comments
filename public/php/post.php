@@ -1,8 +1,13 @@
 <?php
+error_reporting(E_ALL);
 require_once '../../includes/setup.php';
 require_once 'includes/db.php';
-if (isset($_GET['k']) && $s = Session::CheckSession($db))
+require_once 'includes/Session.php';
+if (isset($_GET['k']))
 {
+    $s = Session::CheckSession($db);
+    if (is_null($s)) outError('Unauthorized', 403);
+
     $key = $_GET['k'];
 
     $body = file_get_contents('php://input');
@@ -13,5 +18,7 @@ if (isset($_GET['k']) && $s = Session::CheckSession($db))
     if (strlen($post->comment)<5) outError("Комментарий должен содержать, как минимум, 5 букв.", 400);
 
     $st = $db->prepare('INSERT INTO Comments (post, comment, user) VALUES (?, ?, ?)');
-    $st->execute(array($key, $post->author, $s->user));
+    $st->execute(array($key, $post->comment, $s->user));
+
+    echo(json_encode(array('result'=>'success')));
 }

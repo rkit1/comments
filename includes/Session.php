@@ -31,13 +31,12 @@ class Session {
         $t->user = $user;
         // 30 days or 1 hour
         if($remember) $t->ttl = 2592000; else $t->ttl = 3600;
-
         // session
-        $st = $db->prepare('SELECT TRUE FROM Sessions WHERE idSessions = ?');
+        $st = $db->prepare('SELECT idSessions FROM Sessions WHERE idSessions = ?');
         do {
             $t->sid = uniqid();
             $st->execute(array($t->sid));
-        } while ($st->columnCount() == 1);
+        } while ($st->rowCount() == 1);
 
         $st = $db->prepare('INSERT INTO Sessions (idSessions, User, TimeToLive) VALUES (?,?,?)');
         $st->execute(array($t->sid, $t->user, $t->ttl));
@@ -71,8 +70,11 @@ class Session {
         $st = $db->prepare('SELECT User, TimeToLive FROM Sessions
             WHERE ADDTIME(LastActivity, SEC_TO_TIME(TimeToLive)) >= NOW()
             AND idSessions = ?');
-        $st->execute($_COOKIE['commentsUser']);
-        if (!$res = $st->fetch()) return null;
+        $st->execute(array($_COOKIE['commentsUser']));
+        if (!$res = $st->fetch()) {
+            setcookie('commentsUser', 0, '/');
+            return null;
+        }
 
         $t = new Session();
         $t->sid = $_COOKIE['commentsUser'];
@@ -89,7 +91,7 @@ class Session {
 
     public function Touch(){
         $st = $this->db->prepare('UPDATE Sessions SET LastActivity = NOW() WHERE idSessions = ?');
-        $st->execute($this->sid);
+        $st->execute(array($this->sid));
         $this->touchCookie();
     }
 

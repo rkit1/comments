@@ -10,5 +10,4 @@ document.write(
 <script src="'+ commentsRoot +'./static/model.js"></script>\
 <div xmlns:ng="http://angularjs.org" id="ng-app" ng-app="Comments">\
     <div ng-include src="\''+ commentsRoot +'./static/comments.htm\'"></div>\
-    <div ng-include="\''+ commentsRoot +'./static/auth.htm\'"></div>\
 </div>');
