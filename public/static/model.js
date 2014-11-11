@@ -90,11 +90,16 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             $http({
                 method: 'post',
                 url:commentsRoot + './php/register.php',
-                data:data,
+                data:$scope.registerCtl.data,
                 cache:false
             }).success(function(data){
-                $scope.registerCtl.state = 'ready';
-                $scope.tab = 'RegisterSuccess';
+                if (data.result == 'success'){
+                    $scope.registerCtl.state = 'ready';
+                    $scope.tab = 'RegisterSuccess';
+                } else {
+                    $scope.registerCtl.state = 'error';
+                    $scope.registerCtl.message = "Внутренняя ошибка";
+                }
             }).error(function(data){
                 $scope.registerCtl.state = 'error';
                 if (data.result == 'error')
@@ -163,3 +168,20 @@ comments.factory('Auth', ['$http', '$q', function($http, $q){
         }
     };
 }]);
+comments.directive('match', function () {
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        scope: {
+            match: '='
+        },
+        link: function(scope, elem, attrs, ctrl) {
+            scope.$watch(function() {
+                var modelValue = ctrl.$modelValue || ctrl.$$invalidModelValue;
+                return (ctrl.$pristine && angular.isUndefined(modelValue)) || scope.match === modelValue;
+            }, function(currentValue) {
+                ctrl.$setValidity('match', currentValue);
+            });
+        }
+    };
+});

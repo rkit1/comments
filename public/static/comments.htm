@@ -1,23 +1,21 @@
 <div ng-controller="CommentsController">
     <div>
-        <dl>
-            <div ng-repeat="comment in comments" style="margin-bottom: 1ex;">
-                <div class="row-fluid">
-                    <div class="span2">
-                        <strong>{{comment.author}}:</strong>
-                        <br>
-                        <!--<small>{{formatDate(comment.time)}}</small>
-                        Даты неверны, проблема со стороын php/mysql-->
-                    </div>
-                    <div class="span9" style="white-space: pre-line;"
-                            >{{comment.comment}}</div>
-                    <div class="span1" ng-show="isAdmin">
-                        <i class="icon-remove" ng-click="remove(comment)" style="cursor: pointer"></i>
-                    </div>
+        <div ng-repeat="comment in comments" style="margin-bottom: 1ex;">
+            <div class="row-fluid">
+                <div class="span2">
+                    <strong>{{comment.author}}:</strong>
+                    <br>
+                    <!--<small>{{formatDate(comment.time)}}</small>
+                    Даты неверны, проблема со стороын php/mysql-->
                 </div>
-                <hr>
+                <div class="span9" style="white-space: pre-line;"
+                        >{{comment.comment}}</div>
+                <div class="span1" ng-show="isAdmin">
+                    <i class="icon-remove" ng-click="remove(comment)" style="cursor: pointer"></i>
+                </div>
             </div>
-        </dl>
+            <hr>
+        </div>
         <div ng-show="comments == []">
             <p class="text-info">
                 Пока комментариев нет.
@@ -100,19 +98,58 @@
         </form>
     </div>
     <div ng-show="tab == 'Register'">
+        <h3>Регистрация</h3>
         <form role="form" name="registerForm" class="form-horizontal" ng-submit="registerCtl.submit()">
             <div class="form-group">
                 <label for="emailr" class="control-label">Электронная почта</label>
                 <div class="controls">
-                    <input type="email" class="form-control" id="emailr" required
+                    <input type="email" class="form-control" id="emailr" name="emailr" required
                            ng-disabled="registerCtl.state != 'ready'"
                            placeholder="user@example.com" ng-model="registerCtl.data.email">
+                    <span ng-show="registerForm.emailr.$error.email">Это некорректный адрес электронной почты</span>
                 </div>
+            </div>
+            <div class="form-group">
                 <label for="namer" class="control-label">Имя</label>
                 <div class="controls">
-                    <input type="text" class="form-control" id="namer" required
-                           ng-disabled="registerCtl.state != 'ready'"
+                    <input type="text" class="form-control" id="namer" name="namer" required
+                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
                            placeholder="Иван Иванов З-99" ng-model="registerCtl.data.name">
+                    <span ng-show="registerForm.namer.$error.minlength">Не короче четырех символов</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="passwordr" class="control-label">Пароль</label>
+                <div class="controls">
+                    <input type="password" class="form-control" name="passwordr" id="passwordr" required
+                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
+                           ng-model="registerCtl.data.password">
+                    <span ng-show="registerForm.passwordr.$error.minlength">Не короче четырех символов</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="passwordr1" class="control-label">Пароль еще раз</label>
+                <div class="controls">
+                    <input type="password" class="form-control" id="passwordr1" name="passwordr1" required
+                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
+                           match="registerCtl.data.password" ng-model="registerCtl.data.password1">
+                    <span ng-show="registerForm.passwordr1.$error.match">Пароли не совпадают</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    <button class="btn btn-primary" type="submit"
+                            ng-disabled="registerCtl.state != 'ready' || registerForm.$invalid">
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+            <div class="form-group" ng-show="registerCtl.state == 'error'">
+                <div class="controls">
+                    <span class="text-error">{{registerCtl.message}}</span><br>
+                    <button type="button" ng-click="registerCtl.state = 'ready'" class="btn">
+                        Попробовать снова
+                    </button>
                 </div>
             </div>
         </form>
