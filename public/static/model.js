@@ -43,10 +43,10 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         state: "ready",
         data: {},
         readMessage: function(){
-            this.state = "ready";
+            $scope.postFormCtl.state = "ready";
         },
         submit: function() {
-            this.state = "busy";
+            $scope.postFormCtl.state = "busy";
             $http({
                 method: 'post',
                 url:commentsRoot + './php/post.php',
@@ -54,13 +54,13 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
                 data:this.data,
                 cache:false
             }).success(function() {
-                this.state = "ready";
+                $scope.postFormCtl.state = "ready";
                 $scope.fetchComments();
-                this.data.comment="";
+                $scope.postFormCtl.data.comment="";
             }).error(function(data){
-                this.state = "message";
+                $scope.postFormCtl.state = "message";
                 if (data.result == "error")
-                    this.message = data.message;
+                    $scope.postFormCtl.message = data.message;
                 //TODO handle 403
             });
         }
@@ -68,22 +68,54 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
 
     $scope.authCtl = {
         data: {remember:true},
+        state: 'ready',
         submit: function(){
-            Auth.authorize(this.data)
+            $scope.authCtl.state = 'working';
+            Auth.authorize(this.data).then(function(name){
+                $scope.name = name;
+                $scope.tab = 'Post';
+                $scope.authCtl.state = 'ready';
+            }, function(message){
+                $scope.authCtl.message = message;
+                $scope.authCtl.state = 'error';
+            });
         }
     };
 
-    // "Post", "Auth", "Register", "Settings"
+    $scope.registerCtl = {
+        state: 'ready',
+        data: {},
+        submit: function(){
+            $scope.registerCtl.state = 'working';
+            $http({
+                method: 'post',
+                url:commentsRoot + './php/register.php',
+                data:data,
+                cache:false
+            }).success(function(data){
+                $scope.registerCtl.state = 'ready';
+                $scope.tab = 'RegisterSuccess';
+            }).error(function(data){
+                $scope.registerCtl.state = 'error';
+                if (data.result == 'error')
+                    $scope.registerCtl.message = data.message;
+                else
+                    $scope.registerCtl.message = "Сетевая ошибка";
+            });
+        }
+    };
+
+    // "Post", "Auth", "Register", "Settings", "RegisterSuccess"
     $scope.tab = "Loading";
     Auth.checkSession().then(function(name){
         $scope.name = name;
         $scope.tab = 'Post';
+        $scope.tab = "Register";
     }, function(fail){
         $scope.tab = 'Auth'
     });
 }]);
 comments.factory('Auth', ['$http', '$q', function($http, $q){
-
     return {
         login: function(authData){
             var pr = $q.defer();

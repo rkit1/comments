@@ -3,7 +3,7 @@
         <dl>
             <div ng-repeat="comment in comments" style="margin-bottom: 1ex;">
                 <div class="row-fluid">
-                    <div class="span2" style="text-align: left;">
+                    <div class="span2">
                         <strong>{{comment.author}}:</strong>
                         <br>
                         <!--<small>{{formatDate(comment.time)}}</small>
@@ -39,61 +39,83 @@
             <a href="http://www.mozilla.org/">Firefox</a> или
             <a href="https://www.google.com/intl/ru/chrome/browser/">Chrome</a>.
         </p>
-        <form class="form-horizontal" name="postForm">
-            <div class="control-group">
-                <label for="comment" class="control-label">Сообщение</label>
-                <div class="controls">
+        <form name="postForm" ng-submit="postFormCtl.submit()">
+            <div class="row-fluid">
+                <div class="span2">
+                    <strong>{{name}}:</strong>
+                </div>
+                <div class="span9">
                     <textarea id="comment" name="comment" ng-model="postFormCtl.data.comment"
-                              rows="7" class="span8" required
+                              rows="7" style="width:100%;" required
                               ng-disabled="postFormCtl.state != 'ready'"></textarea>
                 </div>
             </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button ng-click="postFormCtl.submit()"
-                            ng-disabled="postFormCtl.state != 'ready' || postForm.$invalid"
+            <div class="row-fluid">
+                <div class="span2"></div>
+                <div class="span8">
+                    <button type="submit"
+                            ng-disabled="postFormCtl.state != 'ready'"
                             class="btn btn-primary">Отправить</button>
+                    <div ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{postFormCtl.message}}
+                        <button type="button" class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
+                    </div>
                 </div>
-                <div class="controls" ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{message}}
-                    <button class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
-                </div>
+                <div class="span2"><a ng-click="">Настройки</a></div>
             </div>
-            <p>{{name}}</p>
-            <p>Настройки</p>
         </form>
     </div>
     <div ng-show="tab == 'Auth'">
-        <div>
-            <form role="form" class="form-horizontal" ng-submit="submit()">
-                <div class="form-group">
-                    <label for="email" class="control-label">Электронная почта</label>
-                    <div class="controls">
-                        <input type="email" class="form-control" id="email" placeholder="user@example.com" ng-model="form.email">
+        <form role="form" name="authForm" class="form-horizontal" ng-submit="autCtl.submit()">
+            <div class="form-group">
+                <label for="email" class="control-label">Электронная почта</label>
+                <div class="controls">
+                    <input type="email" class="form-control" id="email" required
+                           ng-disabled="authCtl.state != 'ready'"
+                           placeholder="user@example.com" ng-model="authCtl.data.email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="control-label">Пароль</label>
+                <div class="controls">
+                    <input type="password" ng-disabled="authCtl.state != 'ready'" required
+                           class="form-control" id="password" ng-model="authCtl.data.password">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-disabled="authCtl.state != 'ready'"
+                                   ng-model="authCtl.data.remember">Запомнить
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="password" class="control-label">Пароль</label>
-                    <div class="controls">
-                        <input type="password" class="form-control" id="password" ng-model="form.password">
-                    </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    <button type="submit" ng-disabled="authCtl.state != 'ready'" class="btn btn-primary">Вход</button>
                 </div>
-                <div class="form-group">
-                    <div class="controls">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" ng-model="form.remember">Запомнить
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-primary">Вход</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
-    <div ng-show="tab == 'Register'"></div>
+    <div ng-show="tab == 'Register'">
+        <form role="form" name="registerForm" class="form-horizontal" ng-submit="registerCtl.submit()">
+            <div class="form-group">
+                <label for="emailr" class="control-label">Электронная почта</label>
+                <div class="controls">
+                    <input type="email" class="form-control" id="emailr" required
+                           ng-disabled="registerCtl.state != 'ready'"
+                           placeholder="user@example.com" ng-model="registerCtl.data.email">
+                </div>
+                <label for="namer" class="control-label">Имя</label>
+                <div class="controls">
+                    <input type="text" class="form-control" id="namer" required
+                           ng-disabled="registerCtl.state != 'ready'"
+                           placeholder="Иван Иванов З-99" ng-model="registerCtl.data.name">
+                </div>
+            </div>
+        </form>
+    </div>
     <div ng-show="tab == 'Settings'"></div>
 </div>
