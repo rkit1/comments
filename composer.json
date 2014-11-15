@@ -9,6 +9,6 @@
         }
     ],
     "require": {
-        "php-activerecord/php-activerecord": "1.1.*"
+        "phpmailer/phpmailer": "v5.2.6"
     }
 }

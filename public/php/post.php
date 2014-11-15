@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 require_once '../../includes/setup.php';
 require_once 'includes/db.php';
 require_once 'includes/Session.php';
