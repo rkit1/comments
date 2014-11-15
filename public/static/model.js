@@ -13,10 +13,10 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             params: {k: $scope.key},
             cache: false
         }).success(function(data){
-                $scope.comments = data;
-            }).error(function(data){
-                $scope.displayError = true;
-            })
+            $scope.comments = data;
+        }).error(function(data){
+            $scope.displayError = true;
+        })
     };
     $scope.fetchComments();
 
