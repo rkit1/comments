@@ -6,6 +6,7 @@ if (isset($_GET['k']))
 {
     $s = Session::CheckSession($db);
     if (is_null($s)) outError('Unauthorized', 403);
+    if(!$s->IsConfirmed()) outError("Сперва подтвердите e-mail", 403);
 
     $key = $_GET['k'];
 

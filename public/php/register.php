@@ -6,7 +6,7 @@ require_once 'includes/db.php';
 require_once 'includes/mail.php';
 
 $db->beginTransaction();
-if($db->q('SELECT idUsers FROM Users WHERE Email = ?', array($data->email))->columnCount() == 1)
+if($db->q('SELECT idUsers FROM Users WHERE Email = ?', array($data->email))->rowCount() == 1)
     outError("Такой e-mail уже зарегистрирован. Попробуйте восстановить пароль", 400);
 $key = uniqid();
 $db->q('INSERT INTO Users (Email, Name, Role, Password, Salt, ConfirmKey)

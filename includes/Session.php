@@ -5,7 +5,7 @@ class Session {
      */
     private $sid;
     /**
-     * @var PDO
+     * @var MyPDO
      */
     private $db;
     /**
@@ -50,12 +50,20 @@ class Session {
     /**
      * @return Bool
      */
+    public function IsConfirmed(){
+        $r = $this->db->q('SELECT True FROM Users WHERE idUsers = ? AND ConfirmKey IS NULL', array($this->user));
+        return $r->rowCount() == 1;
+    }
+
+    /**
+     * @return Bool
+     */
     public function IsAdmin(){
         if (is_null($this->IsAdmin)){
-            $st = $this->db->prepare('SELECT AdminStatus FROM users WHERE idUsers = ?');
+            $st = $this->db->prepare('SELECT RoleName FROM users JOIN Roles WHERE idUsers = ?');
             $st->execute($this->user);
             $res = $st->fetch();
-            $this->IsAdmin = $res[0] == 1;
+            $this->IsAdmin = $res[0] == 'Admin';
         }
         return $this->IsAdmin;
     }
