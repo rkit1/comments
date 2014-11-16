@@ -1,6 +1,7 @@
 var comments = angular.module('Comments', ['ngCookies']);
 var x;
 comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http', function($scope, $window, Auth, $http){
+    x = $scope;
     $scope.key = $window.location.pathname;
     $scope.isIE10 = !!navigator.userAgent.match(/MSIE 10/);
 
@@ -71,8 +72,8 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         state: 'ready',
         submit: function(){
             $scope.authCtl.state = 'working';
-            Auth.authorize(this.data).then(function(name){
-                $scope.name = name;
+            Auth.authorize(this.data).then(function(data){
+                $scope.authData = data;
                 $scope.tab = 'Post';
                 $scope.authCtl.state = 'ready';
             }, function(message){
@@ -112,10 +113,9 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
 
     // "Post", "Auth", "Register", "Settings", "RegisterSuccess"
     $scope.tab = "Loading";
-    Auth.checkSession().then(function(name){
-        $scope.name = name;
+    Auth.checkSession().then(function(data){
+        $scope.authData = data;
         $scope.tab = 'Post';
-        $scope.tab = "Register";
     }, function(fail){
         $scope.tab = 'Auth'
     });
@@ -130,7 +130,7 @@ comments.factory('Auth', ['$http', '$q', function($http, $q){
                 data:authData,
                 cache:false
             }).success(function(data) {
-                pr.resolve(data.name);
+                pr.resolve(data);
             }).error(function(data){
                 if (data.result == "error") {
                     pr.reject(data.message);
@@ -147,7 +147,7 @@ comments.factory('Auth', ['$http', '$q', function($http, $q){
                 url:commentsRoot + './php/checkAuth.php',
                 cache:false
             }).success(function(data) {
-                pr.resolve(data.name);
+                pr.resolve(data);
             }).error(function(data){
                 pr.reject();
             });

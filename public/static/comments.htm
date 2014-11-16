@@ -38,28 +38,30 @@
             <a href="https://www.google.com/intl/ru/chrome/browser/">Chrome</a>.
         </p>
         <form name="postForm" ng-submit="postFormCtl.submit()">
-            <div class="row-fluid">
-                <div class="span2">
-                    <strong>{{name}}:</strong>
-                </div>
-                <div class="span9">
-                    <textarea id="comment" name="comment" ng-model="postFormCtl.data.comment"
-                              rows="7" style="width:100%;" required
-                              ng-disabled="postFormCtl.state != 'ready'"></textarea>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span2"></div>
-                <div class="span8">
-                    <button type="submit"
-                            ng-disabled="postFormCtl.state != 'ready'"
-                            class="btn btn-primary">Отправить</button>
-                    <div ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{postFormCtl.message}}
-                        <button type="button" class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
+            <fieldset ng-disabled="authData.emailUnconfirmed || postFormCtl.state != 'ready'">
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>{{authData.name}}:</strong>
+                        <span class="text-error" ng-show="authData.emailUnconfirmed">
+                            Для публикации комментариев требуется подтвердить адрес электронной почты</span>
+                    </div>
+                    <div class="span9">
+                        <textarea id="comment" name="comment" ng-model="postFormCtl.data.comment"
+                                  rows="7" style="width:100%;" required></textarea>
                     </div>
                 </div>
-                <div class="span2"><a ng-click="">Настройки</a></div>
-            </div>
+                <div class="row-fluid">
+                    <div class="span2"></div>
+                    <div class="span8">
+                        <button type="submit"
+                                class="btn btn-primary">Отправить</button>
+                        <div ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{postFormCtl.message}}
+                            <button type="button" class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
+                        </div>
+                    </div>
+                    <div class="span2"><a ng-click="">Настройки</a></div>
+                </div>
+            </fieldset>
         </form>
     </div>
     <div ng-show="tab == 'Auth'">
@@ -154,7 +156,7 @@
             </div>
         </form>
     </div>
-    <div ng-show="tab == 'RegisterSuccess">
+    <div ng-show="tab == 'RegisterSuccess'">
 
     </div>
     <div ng-show="tab == 'Settings'"></div>
