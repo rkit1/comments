@@ -43,9 +43,6 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
     $scope.postFormCtl = {
         state: "ready",
         data: {},
-        readMessage: function(){
-            $scope.postFormCtl.state = "ready";
-        },
         submit: function() {
             $scope.postFormCtl.state = "busy";
             $http({
@@ -110,6 +107,8 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             });
         }
     };
+
+    
 
     // "Post", "Auth", "Register", "Settings", "RegisterSuccess"
     $scope.tab = "Loading";

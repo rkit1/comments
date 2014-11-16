@@ -41,111 +41,108 @@
             <fieldset ng-disabled="authData.emailUnconfirmed || postFormCtl.state != 'ready'">
                 <div class="row-fluid">
                     <div class="span2">
-                        <strong>{{authData.name}}:</strong>
+                        <label for="comment"><strong>{{authData.name}}:</strong></label>
                         <span class="text-error" ng-show="authData.emailUnconfirmed">
                             Для публикации комментариев требуется подтвердить адрес электронной почты</span>
                     </div>
                     <div class="span9">
                         <textarea id="comment" name="comment" ng-model="postFormCtl.data.comment"
-                                  rows="7" style="width:100%;" required></textarea>
+                                  rows="7" ng-minlength="5" style="width:100%;" required></textarea>
                     </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span2"></div>
-                    <div class="span8">
-                        <button type="submit"
-                                class="btn btn-primary">Отправить</button>
-                        <div ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{postFormCtl.message}}
-                            <button type="button" class="btn" ng-click="postFormCtl.readMessage()">Попробовать еще раз.</button>
-                        </div>
-                    </div>
-                    <div class="span2"><a ng-click="">Настройки</a></div>
                 </div>
             </fieldset>
+            <div class="row-fluid">
+                <div class="span2"></div>
+                <div class="span8">
+                    <button type="submit" ng-disabled="postForm.$invalid"
+                            class="btn btn-primary">Отправить</button>
+                    <div ng-show="postFormCtl.state == 'message'">Ошибка отправки комментария: {{postFormCtl.message}}
+                        <button type="button" class="btn" ng-click="postFormCtl.state = 'ready'">
+                            Попробовать еще раз.</button>
+                    </div>
+                </div>
+                <div class="span2"><a ng-click="">Настройки</a></div>
+            </div>
         </form>
     </div>
     <div ng-show="tab == 'Auth'">
         <form role="form" name="authForm" class="form-horizontal" ng-submit="autCtl.submit()">
-            <div class="form-group">
-                <label for="email" class="control-label">Электронная почта</label>
-                <div class="controls">
-                    <input type="email" class="form-control" id="email" required
-                           ng-disabled="authCtl.state != 'ready'"
-                           placeholder="user@example.com" ng-model="authCtl.data.email">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="control-label">Пароль</label>
-                <div class="controls">
-                    <input type="password" ng-disabled="authCtl.state != 'ready'" required
-                           class="form-control" id="password" ng-model="authCtl.data.password">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="controls">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"
-                                   ng-disabled="authCtl.state != 'ready'"
-                                   ng-model="authCtl.data.remember">Запомнить
-                        </label>
+            <fieldset ng-disabled="authCtl.state != 'ready'">
+                <div class="form-group">
+                    <label for="email" class="control-label">Электронная почта</label>
+                    <div class="controls">
+                        <input type="email" class="form-control" id="email" required
+                               placeholder="user@example.com" ng-model="authCtl.data.email">
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="controls">
-                    <button type="submit" ng-disabled="authCtl.state != 'ready'" class="btn btn-primary">Вход</button>
+                <div class="form-group">
+                    <label for="password" class="control-label">Пароль</label>
+                    <div class="controls">
+                        <input type="password" required class="form-control" id="password"
+                               ng-model="authCtl.data.password">
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="authCtl.data.remember">Запомнить
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">Вход</button>
+                    </div>
+                </div>
+            </fieldset>
         </form>
     </div>
     <div ng-show="tab == 'Register'">
         <h3>Регистрация</h3>
-        <form role="form" name="registerForm" class="form-horizontal" ng-submit="registerCtl.submit()">
-            <div class="form-group">
-                <label for="emailr" class="control-label">Электронная почта</label>
-                <div class="controls">
-                    <input type="email" class="form-control" id="emailr" name="emailr" required
-                           ng-disabled="registerCtl.state != 'ready'"
-                           placeholder="user@example.com" ng-model="registerCtl.data.email">
-                    <span ng-show="registerForm.emailr.$error.email">Это некорректный адрес электронной почты</span>
+        <form role="form" name="registerForm"ng-submit="registerCtl.submit()">
+            <fieldset ng-disabled="registerCtl.state != 'ready'">
+                <div class="form-group">
+                    <label for="emailr" class="control-label">Электронная почта</label>
+                    <div class="controls">
+                        <input type="email" class="form-control" id="emailr" name="emailr" required
+                               placeholder="user@example.com" ng-model="registerCtl.data.email">
+                        <span ng-show="registerForm.emailr.$error.email">Это некорректный адрес электронной почты</span>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="namer" class="control-label">Имя</label>
-                <div class="controls">
-                    <input type="text" class="form-control" id="namer" name="namer" required
-                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
-                           placeholder="Иван Иванов З-99" ng-model="registerCtl.data.name">
-                    <span ng-show="registerForm.namer.$error.minlength">Не короче четырех символов</span>
+                <div class="form-group">
+                    <label for="namer" class="control-label">Имя</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" id="namer" name="namer" required
+                               ng-minlength="4" placeholder="Иван Иванов З-99" ng-model="registerCtl.data.name">
+                        <span ng-show="registerForm.namer.$error.minlength">Не короче четырех символов</span>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="passwordr" class="control-label">Пароль</label>
-                <div class="controls">
-                    <input type="password" class="form-control" name="passwordr" id="passwordr" required
-                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
-                           ng-model="registerCtl.data.password">
-                    <span ng-show="registerForm.passwordr.$error.minlength">Не короче четырех символов</span>
+                <div class="form-group">
+                    <label for="passwordr" class="control-label">Пароль</label>
+                    <div class="controls">
+                        <input type="password" class="form-control" name="passwordr" id="passwordr" required
+                               ng-minlength="4" ng-model="registerCtl.data.password">
+                        <span ng-show="registerForm.passwordr.$error.minlength">Не короче четырех символов</span>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="passwordr1" class="control-label">Пароль еще раз</label>
-                <div class="controls">
-                    <input type="password" class="form-control" id="passwordr1" name="passwordr1" required
-                           ng-disabled="registerCtl.state != 'ready'" ng-minlength="4"
-                           match="registerCtl.data.password" ng-model="registerCtl.data.password1">
-                    <span ng-show="registerForm.passwordr1.$error.match">Пароли не совпадают</span>
+                <div class="form-group">
+                    <label for="passwordr1" class="control-label">Пароль еще раз</label>
+                    <div class="controls">
+                        <input type="password" class="form-control" id="passwordr1" name="passwordr1" required
+                               ng-minlength="4" match="registerCtl.data.password" ng-model="registerCtl.data.password1">
+                        <span ng-show="registerForm.passwordr1.$error.match">Пароли не совпадают</span>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="controls">
-                    <button class="btn btn-primary" type="submit"
-                            ng-disabled="registerCtl.state != 'ready' || registerForm.$invalid">
-                        Зарегистрироваться
-                    </button>
+                <div class="form-group">
+                    <div class="controls">
+                        <button class="btn btn-primary" type="submit" ng-disabled="registerForm.$invalid">
+                            Зарегистрироваться
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
             <div class="form-group" ng-show="registerCtl.state == 'error'">
                 <div class="controls">
                     <span class="text-error">{{registerCtl.message}}</span><br>
@@ -157,7 +154,67 @@
         </form>
     </div>
     <div ng-show="tab == 'RegisterSuccess'">
-
+        <p>
+            Для завершения регистрации необходимо подтвердить адрес электронной почты.
+            <button ng-click="tab = 'Auth'">Назад</button>фыв
+        </p>
     </div>
-    <div ng-show="tab == 'Settings'"></div>
+    <div ng-show="tab == 'Settings'">
+        <form name="settingsNameForm" role="form">
+            <fieldset ng-disabled="settingsCtl.status != 'ready'">
+                <div class="row-fluid">
+                    <div class="span2"><label for="names">Имя</label></div>
+                    <div class="span5">
+                        <input type="text" id="names" name="names" required
+                               ng-minlength="4" placeholder="Иван Иванов З-99" ng-model="settingsCtl.data.name">
+                        <span ng-show="settingsNameForm.names.$error.minlength">Не короче четырех символов</span>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2"></div>
+                    <div class="span5">
+                        <button type="button" class="btn btn-primary" ng-disabled="settingsNameForm.$invalid"
+                                ng-click="settingsCtl.changeName()">Сохранить</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <form name="settingsPasswordForm" role="form">
+            <fieldset ng-disabled="settingsCtl.status != 'ready'">
+                <div class="row-fluid">
+                    <div class="span2"><label for="passwords">Текущий пароль</label></div>
+                    <div class="span10">
+                        <input type="password" name="passwords" id="passwords" required
+                               ng-minlength="4" ng-model="settingsCtl.data.password">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2"><label for="passwords1">Новый пароль</label></div>
+                    <div class="span10">
+                        <input type="password" id="passwords1" name="passwords1" required
+                               ng-minlength="4" ng-model="settingsCtl.data.password1">
+                        <span ng-show="settingsPasswordForm.passwords1.$error.minlength">Не короче четырех символов</span>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2"><label for="passwords2">Новый пароль еще раз</label></div>
+                    <div class="span10">
+                        <input type="password" id="passwords2" name="password2" required
+                               ng-model="settingsCtl.data.password2"
+                               match="settingsCtl.data.password1">
+                        <span ng-show="settingsPasswordForm.passwords2.$error.match">Пароли не совпадают</span>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2"></div>
+                    <div class="span10">
+                        <button type="button" class="btn btn-primary"
+                                ng-disabled="settingsPasswordForm.$invalid"
+                                ng-click="settingsCtl.changeName()">Сохранить</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
