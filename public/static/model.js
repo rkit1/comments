@@ -108,7 +108,54 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         }
     };
 
-    
+    $scope.$watch('authData.name', function(newV){
+        $scope.settingsCtl.data.name = newV;
+    });
+    $scope.settingsCtl = {
+        state: 'ready',
+        data: {},
+        changeName: function(){
+            sData = {
+                name: $scope.settingsCtl.data.name
+            };
+            $scope.settingsCtl.state = 'working';
+            $http({
+                method: 'post',
+                url:commentsRoot + './php/settings.php',
+                data:sData,
+                cache:false
+            }).success(function() {
+                $scope.settingsCtl.state = "ready";
+                $scope.settingsCtl.savedNameMessage = true;
+                $scope.authData.name = $scope.settingsCtl.data.name;
+            }).error(function(data){
+                $scope.settingsCtl.state = "nMessage";
+                if (data.result == "error") $scope.settingsCtl.nameMessage = data.message;
+                else $scope.settingsCtl.nameMessage = "Сетевая ошибка";
+            });
+        },
+        changePassword: function(){
+            sData = {
+                password: $scope.settingsCtl.data.password,
+                password1: $scope.settingsCtl.data.password1,
+                password2: $scope.settingsCtl.data.password2
+            };
+            $scope.settingsCtl.state = 'working';
+            $http({
+                method: 'post',
+                url:commentsRoot + './php/settings.php',
+                data:sData,
+                cache:false
+            }).success(function() {
+                $scope.settingsCtl.state = "ready";
+                $scope.settingsCtl.savedPasswordMessage = true;
+            }).error(function(data){
+                $scope.settingsCtl.state = "pMessage";
+                if (data.result == "error") $scope.settingsCtl.passwordMessage = data.message;
+                else $scope.settingsCtl.passwordMessage = "Сетевая ошибка";
+            });
+        }
+    };
 
     // "Post", "Auth", "Register", "Settings", "RegisterSuccess"
     $scope.tab = "Loading";

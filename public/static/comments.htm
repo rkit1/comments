@@ -61,7 +61,7 @@
                             Попробовать еще раз.</button>
                     </div>
                 </div>
-                <div class="span2"><a ng-click="">Настройки</a></div>
+                <div class="span2"><button role="button" class="btn" ng-click="tab = 'Settings'">Настройки</button></div>
             </div>
         </form>
     </div>
@@ -161,7 +161,7 @@
     </div>
     <div ng-show="tab == 'Settings'">
         <form name="settingsNameForm" role="form">
-            <fieldset ng-disabled="settingsCtl.status != 'ready'">
+            <fieldset ng-disabled="settingsCtl.state != 'ready'">
                 <div class="row-fluid">
                     <div class="span2"><label for="names">Имя</label></div>
                     <div class="span5">
@@ -173,15 +173,25 @@
                 <div class="row-fluid">
                     <div class="span2"></div>
                     <div class="span5">
-                        <button type="button" class="btn btn-primary" ng-disabled="settingsNameForm.$invalid"
+                        <button type="button" class="btn btn-primary"
+                                ng-disabled="settingsNameForm.$invalid || settingsNameForm.$pristine"
                                 ng-click="settingsCtl.changeName()">Сохранить</button>
+                        <span ng-show="settingsCtl.savedNameMessage">Сохранено</span>
                     </div>
                 </div>
             </fieldset>
         </form>
-
+        <div class="row-fluid">
+            <div class="span2"></div>
+            <div class="span5" ng-show="settingsCtl.state == 'nMessage'">
+                <span class="text-error">{{settingsCtl.nameMessage}}</span><br>
+                <button type="button" ng-click="settingsCtl.state = 'ready'" class="btn">
+                    Попробовать снова
+                </button>
+            </div>
+        </div>
         <form name="settingsPasswordForm" role="form">
-            <fieldset ng-disabled="settingsCtl.status != 'ready'">
+            <fieldset ng-disabled="settingsCtl.state != 'ready'">
                 <div class="row-fluid">
                     <div class="span2"><label for="passwords">Текущий пароль</label></div>
                     <div class="span10">
@@ -210,11 +220,24 @@
                     <div class="span2"></div>
                     <div class="span10">
                         <button type="button" class="btn btn-primary"
-                                ng-disabled="settingsPasswordForm.$invalid"
-                                ng-click="settingsCtl.changeName()">Сохранить</button>
+                                ng-disabled="settingsPasswordForm.$invalid || settingsPasswordForm.$pristine"
+                                ng-click="settingsCtl.changePassword()">Сохранить</button>
+                        <span ng-show="settingsCtl.savedPasswordMessage">Сохранено</span>
                     </div>
                 </div>
             </fieldset>
+            <div class="row-fluid">
+                <div class="span2"></div>
+                <div class="span10" ng-show="settingsCtl.state == 'pMessage'">
+                    <span class="text-error">{{settingsCtl.passwordMessage}}</span><br>
+                    <button type="button" ng-disabled="false" ng-click="settingsCtl.state = 'ready'" class="btn">
+                        Попробовать снова
+                    </button>
+                </div>
+            </div>
         </form>
+        <div>
+            <button role="button" class="btn" ng-click="tab = 'post'">Назад</button>
+        </div>
     </div>
 </div>
