@@ -1,5 +1,5 @@
 <?php
-require_once 'vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 function confirmMail($email, $name, $key){
     $keyu = urlencode($key);
     $emailu = urlencode($email);
@@ -19,7 +19,6 @@ function confirmMail($email, $name, $key){
 http://clubvi.ru/apps/comments/php/confirmMail.php?k={$keyu}&email={$emailu}";
     if(!$mail->send()) throw new Exception("Ошибка отправки email");
 }
-
 function resetMail($email, $name, $key){
     $keyu = urlencode($key);
     $emailu = urlencode($email);

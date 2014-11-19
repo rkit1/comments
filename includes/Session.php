@@ -81,7 +81,7 @@ class Session {
             AND idSessions = ?');
         $st->execute(array($_COOKIE['commentsUser']));
         if (!$res = $st->fetch()) {
-            setcookie('commentsUser', 0, '/');
+            setcookie('commentsUser', '', 0, '/');
             return null;
         }
 
@@ -105,7 +105,6 @@ class Session {
     }
 
     public function Logout(){
-        $st = $this->db->prepare('DELETE FROM Sessions WHERE idSessions = ?');
-        $st->execute($this->sid);
+        $this->db->q('DELETE FROM Sessions WHERE idSessions = ?', array($this->sid));
     }
 }

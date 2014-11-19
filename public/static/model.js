@@ -159,10 +159,50 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         }
     };
 
+    $scope.changePassCtl = {
+        state: 'ready',
+        data: {},
+        submit: function(){
+            $scope.changePassCtl.state = 'working';
+            $http({
+                method: 'post',
+                url:commentsRoot + './php/resetPassword.php',
+                data:$scope.changePassCtl.data,
+                cache:false
+            }).success(function(data){
+                if (data.result == 'success'){
+                    $scope.changePassCtl.state = 'ready';
+                    $scope.tab = 'ChangePassSuccess';
+                } else {
+                    $scope.changePassCtl.state = 'error';
+                    $scope.changePassCtl.message = "Внутренняя ошибка";
+                }
+            }).error(function(data){
+                $scope.changePassCtl.state = 'error';
+                if (data.result == 'error')
+                    $scope.changePassCtl.message = data.message;
+                else
+                    $scope.changePassCtl.message = "Сетевая ошибка";
+            });
+        }
+    };
 
+    $scope.logout = function(){
+        if (confirm('Точно выйти?')){
+            Auth.logout().then(function(){
+                window.location.reload()
+            }, function(data){
+                alert('Ошибка: ' + data.toSource());
+            })
+        }
+    };
 
-    // "Post", "Auth", "Register", "Settings", "RegisterSuccess", "ChangePassword"
+    // "Post", "Auth", "Register", "Settings", "RegisterSuccess", "ChangePassword", "ChangePassSuccess"
     $scope.tab = "Loading";
+    $scope.selectTab = function(){
+        $scope.tab = 'Auth';
+        if ($scope.authData.result=='success') $scope.tab = 'Post';
+    };
     Auth.checkSession().then(function(data){
         $scope.authData = data;
         $scope.tab = 'Post';

@@ -62,6 +62,7 @@
                             Попробовать еще раз.</button>
                     </div>
                 </div>
+                <div class="span2"><button type="button" class="btn" ng-click="logout()">Выход из системы</button></div>
                 <!--<div class="span2"><button type="button" class="btn" ng-click="tab = 'Settings'">Настройки</button></div>-->
             </div>
         </form>
@@ -101,6 +102,9 @@
                 </div>
             </fieldset>
         </form>
+        <span class="text-error" ng-show="authCtl.state == 'error'">
+            {{authCtl.message}} <button class="btn" ng-click="authCtl.state = 'ready'">Попробовать снова</button>
+        </span>
     </div>
     <div ng-show="tab == 'Register'">
         <h3>Регистрация</h3>
@@ -160,6 +164,12 @@
         <p>
             Для завершения регистрации необходимо подтвердить адрес электронной почты.
             <button ng-click="tab = 'Auth'">Назад</button>
+        </p>
+    </div>
+    <div ng-show="tab == 'ChangePassSuccess'">
+        <p>
+            Смену пароля необходимо подтвердить по электронной почте
+            <button ng-click="selectTab()">Назад</button>
         </p>
     </div>
     <div ng-show="tab == 'Settings'">
@@ -260,7 +270,7 @@
                     <div class="controls">
                         <input type="password" class="form-control" name="passwordс" id="passwordс" required
                                ng-minlength="4" ng-model="changePassCtl.data.password">
-                        <span ng-show="changePassForm.passwordс.$error.minlength">Не короче четырех символов</span>
+                        <span ng-show="changePassForm.passwordc.$error.minlength">Не короче четырех символов</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -280,5 +290,12 @@
                 </div>
             </fieldset>
         </form>
+        <div class="span2"></div>
+        <div class="span10" ng-show="changePassCtl.state == 'error'">
+            <span class="text-error">{{changePassCtl.message}}</span><br>
+            <button type="button" ng-disabled="false" ng-click="changePassCtl.state = 'ready'" class="btn">
+                Попробовать снова
+            </button>
+        </div>
     </div>
 </div>
