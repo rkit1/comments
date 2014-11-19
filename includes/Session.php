@@ -29,6 +29,7 @@ class Session {
     public static function NewSession($user, $remember, $db) {
         $t = new Session();
         $t->user = $user;
+        $t->db = $db;
         // 30 days or 1 hour
         if($remember) $t->ttl = 2592000; else $t->ttl = 3600;
         // session

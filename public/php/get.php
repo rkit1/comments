@@ -1,11 +1,13 @@
 <?php
 require_once '../../includes/setup.php';
+require_once 'includes/db.php';
 
 if (isset($_GET['k']))
 {
-    require_once 'includes/db.php';
-    $st = $db->prepare('SELECT idComments, comment, Name, time FROM Comments JOIN users WHERE post = ?');
-    $st->execute(array($_GET['k']));
+    $st = $db->q('SELECT idComments, Comment, Name, Time
+                  FROM Comments
+                  JOIN users WHERE post = ?'
+                , array($_GET['k']));
     $out = array();
     while($row = $st->fetch())
     {

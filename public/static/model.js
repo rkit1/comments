@@ -17,6 +17,8 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             $scope.comments = data;
         }).error(function(data){
             $scope.displayError = true;
+            if (data.result="error") $scope.errorMessage = data.message;
+            else $scope.errorMessage = "Сетевая ошибка"
         })
     };
     $scope.fetchComments();
@@ -49,7 +51,7 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
                 method: 'post',
                 url:commentsRoot + './php/post.php',
                 params: {k: $scope.key},
-                data:this.data,
+                data:$scope.postFormCtl.data,
                 cache:false
             }).success(function() {
                 $scope.postFormCtl.state = "ready";
@@ -69,7 +71,7 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         state: 'ready',
         submit: function(){
             $scope.authCtl.state = 'working';
-            Auth.authorize(this.data).then(function(data){
+            Auth.login($scope.authCtl.data).then(function(data){
                 $scope.authData = data;
                 $scope.tab = 'Post';
                 $scope.authCtl.state = 'ready';
@@ -157,7 +159,9 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
         }
     };
 
-    // "Post", "Auth", "Register", "Settings", "RegisterSuccess"
+
+
+    // "Post", "Auth", "Register", "Settings", "RegisterSuccess", "ChangePassword"
     $scope.tab = "Loading";
     Auth.checkSession().then(function(data){
         $scope.authData = data;

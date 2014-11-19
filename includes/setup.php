@@ -21,8 +21,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
 {
     switch ($errno){
         case E_NOTICE:
-        case E_WARNING:
-        break;
+            break;
         default:
             outError("[$errfile:$errline] $errstr");
     }
