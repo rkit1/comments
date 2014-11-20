@@ -1,6 +1,8 @@
 <?php
-require_once '../../includes/db.php';
-require_once '../../includes/mail.php';
+namespace Comments;
+require_once '../../Config.php';
+$db = Config::db();
+
 if (isset($_GET['k'], $_GET['email'])){
     header('Content-type: text/html; charset=utf8');
     echo '<h1>';
@@ -14,18 +16,18 @@ if (isset($_GET['k'], $_GET['email'])){
     echo 'Пароль сменен успешно';
     $db->commit();
 } else {
-    require_once '../../includes/setup.php';
+    JSON::Setup();
     $post = json_decode(file_get_contents('php://input'));
-    if (!$post) outError('no input', 400);
+    if (!$post) JSON::outError('no input', 400);
     $db->beginTransaction();
     $id = $db->q('SELECT idUsers, Name, ConfirmKey FROM Users WHERE Email = :email'
         , array(':email' => $post->email))
         ->fetch();
-    if ($id[2]) outError("Указан неверный адрес электронной почты", 400);
+    if ($id[2]) JSON::outError("Указан неверный адрес электронной почты", 400);
     $key = uniqid('', true);
     $db->q('INSERT INTO ResetPassword (ConfirmKey, User, NewPassword) VALUES (:k, :id, :pass)',
         array(':k'=>$key, ':id'=>$id[0], ':pass'=>$post->password));
-    resetMail($post->email, $id[1], $key);
+    Mail::resetMail($post->email, $id[1], $key);
     $db->commit();
     echo json_encode(array('result'=>'success'));
 }

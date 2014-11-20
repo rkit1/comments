@@ -1,7 +1,8 @@
 <?php
-require_once '../../includes/setup.php';
-require_once 'includes/db.php';
-
+namespace Comments;
+require_once '../../Config.php';
+$db = Config::db();
+JSON::Setup();
 if (isset($_GET['k']))
 {
     $st = $db->q('SELECT idComments, Comment, Name, Time

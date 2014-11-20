@@ -1,4 +1,5 @@
 <?php
+namespace Comments;
 class Session {
     /**
      * @var String
@@ -23,7 +24,7 @@ class Session {
     /**
      * @param $user Int
      * @param $remember Bool
-     * @param $db PDO
+     * @param $db \PDO
      * @return Session
      */
     public static function NewSession($user, $remember, $db) {
@@ -70,7 +71,7 @@ class Session {
     }
 
     /**
-     * @param $db PDO
+     * @param $db \PDO
      * @param $touch Bool
      * @return Session
      */

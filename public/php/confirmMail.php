@@ -1,7 +1,6 @@
-<?php header('Content-type: text/html; charset=utf8');?>
-<h1>
 <?php
-require_once '../../includes/db.php';
+header('Content-type: text/html; charset=utf8');
+echo '<h1>';
 
 if (isset($_GET['k'], $_GET['email'])){
     $r = $db->q('UPDATE Users SET ConfirmKey = NULL WHERE email = :email AND ConfirmKey = :cKey'
