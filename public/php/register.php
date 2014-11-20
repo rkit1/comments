@@ -4,8 +4,8 @@ require_once '../../Config.php';
 $db = Config::db();
 JSON::Setup();
 
-$data = json_decode(file_get_contents('php://input'));
-if ($data == null || !isset($data->email, $data->name, $data->password)) JSON::outError("no data", 400);
+$data = JSON::ReadInput();
+if (!isset($data->email, $data->name, $data->password)) JSON::outError("no data", 400);
 
 $db->beginTransaction();
 if($db->q('SELECT idUsers FROM Users WHERE Email = ?', array($data->email))->rowCount() == 1)

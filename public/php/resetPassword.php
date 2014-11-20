@@ -17,8 +17,7 @@ if (isset($_GET['k'], $_GET['email'])){
     $db->commit();
 } else {
     JSON::Setup();
-    $post = json_decode(file_get_contents('php://input'));
-    if (!$post) JSON::outError('no input', 400);
+    $post = JSON::ReadInput();
     $db->beginTransaction();
     $id = $db->q('SELECT idUsers, Name, ConfirmKey FROM Users WHERE Email = :email'
         , array(':email' => $post->email))

@@ -6,11 +6,9 @@ JSON::Setup();
 
 $s = Session::CheckSession($db);
 if ($s->IsAdmin()) {
-    $body = file_get_contents('php://input');
-    $data = json_decode($body);
-    $data->id = trim($data->id);
-    if (!is_numeric($data->id)) JSON::outError('wrong input', 400);
-    $db->prepare('DELETE FROM comments WHERE idComments = ?')->execute($data['id']);
+    if (!is_numeric($_GET['id'])) JSON::outError('wrong input', 400);
+    $r = $db->q('DELETE FROM comments WHERE idComments = ?', array($_GET['id']))->fetch();
+    if (!$r) JSON::outError ('Такого комментария не существует', 500);
     echo json_encode(array('result'=>'success'));
 } else {
     JSON::outError('access denied', 403);

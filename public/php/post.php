@@ -12,10 +12,7 @@ if (isset($_GET['k']))
 
     $key = $_GET['k'];
 
-    $body = file_get_contents('php://input');
-    $post = json_decode($body);
-
-    if ($post == null) JSON::outError("No data given", 400);
+    $post = JSON::ReadInput();
     $post->comment = trim($post->comment);
     if (strlen($post->comment)<5) JSON::outError("Комментарий должен содержать, как минимум, 5 букв.", 400);
 

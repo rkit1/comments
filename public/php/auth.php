@@ -3,8 +3,8 @@ namespace Comments;
 require_once '../../Config.php';
 $db = Config::db();
 JSON::Setup();
-$auth = json_decode(file_get_contents('php://input'));
-if ($auth == null || !isset($auth->email, $auth->password)) JSON::outError("No input", 400);
+$auth = JSON::ReadInput();
+if (!isset($auth->email, $auth->password)) JSON::outError("No input", 400);
 
 $db->beginTransaction();
 $user = $db->q('SELECT idUsers, Name, ConfirmKey IS NULL, RoleName  FROM Users JOIN Roles ON Role = idRoles

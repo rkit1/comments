@@ -62,11 +62,10 @@ class Session {
      */
     public function IsAdmin(){
         if (is_null($this->IsAdmin)){
-            $st = $this->db->prepare('SELECT RoleName FROM users JOIN Roles ON Role = idRoles
-                                      WHERE idUsers = ?');
-            $st->execute($this->user);
-            $res = $st->fetch();
-            $this->IsAdmin = $res[0] == 'Admin';
+            $res = $this->db->q('SELECT RoleName FROM users JOIN Roles ON Role = idRoles
+                                 WHERE idUsers = ?'
+                               , array($this->user)) -> fetch();
+            $this->IsAdmin = $res && $res[0] == 'Admin';
         }
         return $this->IsAdmin;
     }

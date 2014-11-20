@@ -1,6 +1,10 @@
 <?php
 namespace Comments;
 class JSON {
+    /**
+     * @param string $msg
+     * @param int $code
+     */
     public static function outError($msg, $code=500)
     {
         $out = new \stdClass();
@@ -37,5 +41,14 @@ class JSON {
             JSON::outError($exception->getMessage());
         }
         set_exception_handler('exception_handler');
+    }
+
+    /**
+     * @return \STDClass
+     */
+    public static function ReadInput(){
+        $data = json_decode(file_get_contents('php://input'));
+        if ($data == null) JSON::outError("No input", 400);
+        return $data;
     }
 }

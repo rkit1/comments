@@ -28,15 +28,13 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             $http({
                 method: 'get',
                 url:commentsRoot + './php/remove.php',
-                params: {k: $scope.key, id: comment.idComments},
-                data:$scope.toSubmit,
+                params: {id: comment.idComments},
                 cache:false
             }).success(function() {
                 $scope.fetchComments();
             }).error(function(data){
-                if (data.result == "error") {
-                    alert(data.message);
-                }
+                if (data.result == "error") alert(data.message);
+                else alert('Сетевая ошибка');
             })
         }
     };

@@ -6,11 +6,7 @@ JSON::Setup();
 $s = Session::CheckSession($db);
 if (is_null($s)) JSON::outError('Unauthorized', 403);
 
-$body = file_get_contents('php://input');
-$post = json_decode($body);
-
-if ($post == null) JSON::outError("No data given", 400);
-
+$post = JSON::ReadInput();
 if (isset($post->name)){
     $n = trim($post->name);
     if (strlen($n) < 4) JSON::outError("Wrong input", 400);
