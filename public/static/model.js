@@ -61,7 +61,7 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
                 $scope.postFormCtl.state = "message";
                 if (data.result == "error")
                     $scope.postFormCtl.message = data.message;
-                //TODO handle 403
+                else $scope.postFormCtl.message = 'Сетевая ошибка';
             });
         }
     };
@@ -249,10 +249,13 @@ comments.factory('Auth', ['$http', '$q', function($http, $q){
                 method: 'get',
                 url: commentsRoot + './php/logout.php',
                 cache: false
-            }).success(function(){
-                pr.resolve();
-            }).error(function(){
-                pr.reject();
+            }).success(function(data){
+                if (data.result == 'success') pr.reject('Сетевая ошибка');
+                else pr.resolve();
+            }).error(function(data){
+                if (isset(data.message))
+                    pr.reject(data.message);
+                else pr.reject('Сетевая ошибка')
             });
             return pr.promise;
         }

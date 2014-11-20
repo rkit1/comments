@@ -15,6 +15,4 @@ if ($s->IsAdmin()) {
 } else {
     JSON::outError('access denied', 403);
 }
-
-
 ?>

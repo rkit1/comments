@@ -10,7 +10,7 @@
                 </div>
                 <div class="span9" style="white-space: pre-line;"
                         >{{comment.comment}}</div>
-                <div class="span1" ng-show="isAdmin">
+                <div class="span1" ng-show="authData.isAdmin">
                     <i class="icon-remove" ng-click="remove(comment)" style="cursor: pointer"></i>
                 </div>
             </div>

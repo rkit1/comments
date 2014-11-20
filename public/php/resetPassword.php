@@ -7,7 +7,7 @@ if (isset($_GET['k'], $_GET['email'])){
     header('Content-type: text/html; charset=utf8');
     echo '<h1>';
     $db->beginTransaction();
-    $r = $db->q('SELECT NewPassword FROM ResetPassword JOIN Users WHERE Email = :email',
+    $r = $db->q('SELECT NewPassword FROM ResetPassword JOIN Users ON User = idUsers WHERE Email = :email',
         array(':email'=>$_GET['email']))->fetch();
     if (!$r) die ('Указаны некорректные данные');
     $r = $db->q('UPDATE Users SET Password = md5(concat(Salt, :newPass)) WHERE Email = :email',
