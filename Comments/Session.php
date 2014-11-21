@@ -43,7 +43,7 @@ class Session {
         $st = $db->prepare('INSERT INTO Sessions (idSessions, User, TimeToLive) VALUES (?,?,?)');
         $st->execute(array($t->sid, $t->user, $t->ttl));
 
-        $db->exec('CALL Cleanup_Sessions');
+        //$db->exec('CALL Cleanup_Sessions');
 
         $t->TouchCookie();
         return $t;
