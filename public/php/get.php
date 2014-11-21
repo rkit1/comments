@@ -7,7 +7,7 @@ if (isset($_GET['k']))
 {
     $st = $db->q('SELECT idComments, Comment, Name, Time
                   FROM Comments
-                  JOIN users ON User = idUsers
+                  JOIN Users ON User = idUsers
                   WHERE post = ?'
                 , array($_GET['k']));
     $out = array();
