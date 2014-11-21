@@ -24,7 +24,7 @@ if (isset($_GET['k'], $_GET['email'])){
         ->fetch();
     if ($id[2]) JSON::outError("Указан неверный адрес электронной почты", 400);
     $key = uniqid('', true);
-    $db->q('INSERT INTO ResetPassword (ConfirmKey, User, NewPassword) VALUES (:k, :id, :pass)',
+    $db->q('INSERT INTO ResetPassword (ConfirmKey, User, NewPassword, Time) VALUES (:k, :id, :pass, NOW())',
         array(':k'=>$key, ':id'=>$id[0], ':pass'=>$post->password));
     Mail::resetMail($post->email, $id[1], $key);
     $db->commit();

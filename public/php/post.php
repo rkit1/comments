@@ -16,7 +16,7 @@ if (isset($_GET['k']))
     $post->comment = trim($post->comment);
     if (strlen($post->comment)<5) JSON::outError("Комментарий должен содержать, как минимум, 5 букв.", 400);
 
-    $db->q('INSERT INTO Comments (post, comment, user) VALUES (?, ?, ?)'
+    $db->q('INSERT INTO Comments (post, comment, user, time) VALUES (?, ?, ?, NOW())'
           , array($key, $post->comment, $s->user));
 
     echo(json_encode(array('result'=>'success')));

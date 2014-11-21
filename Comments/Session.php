@@ -40,7 +40,7 @@ class Session {
             $st->execute(array($t->sid));
         } while ($st->rowCount() == 1);
 
-        $st = $db->prepare('INSERT INTO Sessions (idSessions, User, TimeToLive) VALUES (?,?,?)');
+        $st = $db->prepare('INSERT INTO Sessions (idSessions, User, TimeToLive, LastActivity) VALUES (?,?,?, NOW())');
         $st->execute(array($t->sid, $t->user, $t->ttl));
 
         //$db->exec('CALL Cleanup_Sessions');
