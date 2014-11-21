@@ -1,20 +1,5 @@
 <?php
 namespace Comments;
-/**
- * @param $exception \Exception
- */
-function JSON_exception_handler($exception) {
-    JSON::outError($exception->getMessage());
-}
-function jsonErrorHandler($errno, $errstr, $errfile, $errline)
-{
-    switch ($errno){
-        case E_NOTICE:
-            break;
-        default:
-            JSON::outError("[$errfile:$errline] $errstr");
-    }
-}
 class JSON {
     /**
      * @param string $msg
@@ -30,6 +15,24 @@ class JSON {
         die();
     }
 
+    public static function ErrorHandler($errno, $errstr, $errfile, $errline)
+    {
+        switch ($errno){
+            case E_NOTICE:
+            case E_WARNING:
+            break;
+            default:
+            JSON::outError("[$errfile:$errline] $errstr");
+        }
+    }
+
+    /**
+     * @param $exception \Exception
+     */
+    public static function ExceptionHandler($exception) {
+        JSON::outError($exception->getMessage());
+    }
+
     public static function Setup(){
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET, OPTIONS, POST");
@@ -37,8 +40,9 @@ class JSON {
         header("Access-Control-Allow-Headers: Content-Type");
         header("Content-type: application/json");
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') die();
-        set_error_handler("jsonErrorHandler");
-        set_exception_handler('JSON_exception_handler');
+
+        set_error_handler(array('JSON', 'ErrorHandler'));
+        set_exception_handler(array('JSON', 'ExceptionHandler'));
     }
 
     /**
