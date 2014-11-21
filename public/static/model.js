@@ -190,7 +190,7 @@ comments.controller('CommentsController', ['$scope', '$window', 'Auth', '$http',
             Auth.logout().then(function(){
                 window.location.reload()
             }, function(data){
-                alert('Ошибка: ' + data.toSource());
+                alert('Ошибка: ' + data);
             })
         }
     };
@@ -248,8 +248,8 @@ comments.factory('Auth', ['$http', '$q', function($http, $q){
                 url: commentsRoot + './php/logout.php',
                 cache: false
             }).success(function(data){
-                if (data.result == 'success') pr.reject('Сетевая ошибка');
-                else pr.resolve();
+                if (data.result == 'success') pr.resolve();
+                else pr.reject('Сетевая ошибка');
             }).error(function(data){
                 if (isset(data.message))
                     pr.reject(data.message);

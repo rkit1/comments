@@ -1,4 +1,7 @@
 <?php
+namespace Comments;
+require_once '../../Config.php';
+$db = Config::db();
 header('Content-type: text/html; charset=utf8');
 echo '<h1>';
 

@@ -16,9 +16,9 @@ if (isset($post->name)){
 } elseif (isset($post->password, $post->password1, $post->password2)){
     if ($post->password1 != $post->password2 || strlen($post->password1) < 4) JSON::outError("wrong input", 400);
     $r = $db->q('UPDATE Users
-                 SET Password = md5(concat(Salt, :pass))
+                 SET Password = :pass
                  WHERE idUsers = :id
-                 AND md5(concat(Salt, :oldpass)) = Password'
+                 AND :oldpass = Password'
         , array(':oldpass' => $post->password, ':pass'=> $post->password1, ':id' => $s->user));
     if ($r->rowCount() == 0) JSON::outError('Неверный пароль', 403);
     echo json_encode(array('result' => 'success'));

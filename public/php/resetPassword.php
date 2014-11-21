@@ -10,7 +10,7 @@ if (isset($_GET['k'], $_GET['email'])){
     $r = $db->q('SELECT NewPassword FROM ResetPassword JOIN Users ON User = idUsers WHERE Email = :email',
         array(':email'=>$_GET['email']))->fetch();
     if (!$r) die ('Указаны некорректные данные');
-    $r = $db->q('UPDATE Users SET Password = md5(concat(Salt, :newPass)) WHERE Email = :email',
+    $r = $db->q('UPDATE Users SET Password = :newPass WHERE Email = :email',
         array(':newPass'=>$r[0], ':email'=>$_GET['email']));
     if ($r->rowCount() != 1) die ('Внутренняя ошибка');
     echo 'Пароль сменен успешно';
