@@ -1,4 +1,4 @@
 .idea
 vendor
 composer.lock
-includes/db.php
+config.php
